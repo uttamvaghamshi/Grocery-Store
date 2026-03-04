@@ -5,13 +5,7 @@ import StoreAdmin from "../Models/StoreAdmin.js";
 
 export const registerStoreAdmin = async (req, res) => {
   try {
-    const {
-      username,
-      password,
-      latitude,
-      longitude,
-      area
-    } = req.body;
+    let { username, password, latitude, longitude, area } = req.body;
 
     if (!username || !password) {
       return res.status(400).json({
@@ -20,11 +14,16 @@ export const registerStoreAdmin = async (req, res) => {
       });
     }
 
-    if ((latitude !== undefined || longitude !== undefined) && 
-        (typeof latitude !== 'number' || typeof longitude !== 'number')) {
+    const latNum = latitude !== undefined ? Number(latitude) : undefined;
+    const longNum = longitude !== undefined ? Number(longitude) : undefined;
+
+    if (
+      (latNum !== undefined && longNum !== undefined) &&
+      (isNaN(latNum) || isNaN(longNum))
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Latitude and longitude must be valid numbers if provided"
+        message: "Latitude and longitude must be valid numbers"
       });
     }
 
@@ -42,9 +41,10 @@ export const registerStoreAdmin = async (req, res) => {
       username,
       password_hash: hashedPassword,
       area,
-      location: latitude !== undefined && longitude !== undefined 
-        ? { lat: Number(latitude), long: Number(longitude) } 
-        : undefined,
+      location:
+        latNum !== undefined && longNum !== undefined
+          ? { lat: latNum, long: longNum }
+          : undefined
     });
 
     await newAdmin.save();
@@ -52,21 +52,13 @@ export const registerStoreAdmin = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Store admin registered successfully",
-      admin: {
-        id: newAdmin._id,
-        username: newAdmin.username,
-        role: newAdmin.role,
-        area,
-        location: newAdmin.location || null
-      }
+      admin: newAdmin
     });
 
   } catch (error) {
-    console.error("Store admin registration error:", error);
     res.status(500).json({
       success: false,
-      message: "Server error during registration",
-      error: error.message
+      message: error.message
     });
   }
 };
