@@ -134,7 +134,7 @@ export const loginStoreAdmin = async (req, res) => {
 
 export const getAllStores = async (req, res) => {
   try {
-    const stores = await StoreAdmin.find({ isActive: true })
+    const stores = await StoreAdmin.find()
     .select("-password_hash -__v");
     res.json(stores);
   } catch (err) {
