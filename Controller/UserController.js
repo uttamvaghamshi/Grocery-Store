@@ -145,10 +145,10 @@ export const profile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
     try {
-        const userId = req.user._id; 
-        const { name, phone, email, password, image_url, lat, long } = req.body;
+        const userId = req.user._id;
+        const { name, phone, email, password, lat, long } = req.body;
 
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).select("+password_hash");
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -169,17 +169,36 @@ export const updateProfile = async (req, res) => {
             user.phone = phone;
         }
 
-        if (name)          user.name = name;
-        if (image_url)     user.image_url = image_url;
+        if (name) user.name = name;
+
         if (password) {
             user.password_hash = await bcrypt.hash(password, 10);
         }
 
-        if (lat && long) {
+        if (lat !== undefined && long !== undefined) {
             user.location = {
                 lat: Number(lat),
                 long: Number(long)
             };
+        }
+
+        if (req.file && req.file.buffer) {
+            try {
+                const uploadResult = await streamUpload(
+                    req.file.buffer,
+                    "grocery-users"
+                );
+
+                user.image_url = uploadResult.secure_url;
+
+            } catch (uploadError) {
+                console.error("Cloudinary upload failed:", uploadError);
+                return res.status(500).json({
+                    success: false,
+                    message: "Image upload failed",
+                    error: uploadError.message
+                });
+            }
         }
 
         await user.save();
@@ -197,6 +216,7 @@ export const updateProfile = async (req, res) => {
                 loginCount: user.loginCount
             }
         });
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Something went wrong" });
