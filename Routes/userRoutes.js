@@ -9,6 +9,6 @@ const router = express.Router();
 router.post('/register',upload.single("image"),registerUser);
 router.post('/login',loginUser);
 router.get('/profile',authMiddleware,userRoleMiddleware,profile);
-router.put('/edit-profile',authMiddleware,userRoleMiddleware,updateProfile);
+router.put('/edit-profile',authMiddleware,userRoleMiddleware,upload.single("image"),updateProfile);
 
 export default router;
