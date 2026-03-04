@@ -2,6 +2,7 @@ import User from '../Models/User.js';
 import bcrypt from 'bcryptjs';
 import generateToken from '../Utils/generateToken.js';
 import dotenv from 'dotenv';
+import streamUpload from '../Utils/streamUpload.js';
 
 dotenv.config();
 
