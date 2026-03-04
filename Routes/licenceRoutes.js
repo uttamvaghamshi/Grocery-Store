@@ -1,5 +1,5 @@
 import express from "express";
-import upload from "../middleware/uploadimage.js";
+import upload from "../Middleware/upload.js";
 import isRider from '../Middleware/riderRoleMiddleware.js';
 import isAdmin from '../Middleware/adminRoleMiddleware.js';
 import authMiddleware from '../Middleware/authMiddleware.js';

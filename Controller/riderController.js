@@ -1,4 +1,4 @@
-import Rider from '../Mo    dels/Rider.js';
+import Rider from '../Models/Rider.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Order from '../Models/Order.js';
