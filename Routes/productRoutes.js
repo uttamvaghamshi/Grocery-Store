@@ -14,6 +14,7 @@ router.post('/add-product',authMiddleware,storeAdminMiddleware,addProduct);
 router.put('/update-product/:id',authMiddleware,storeAdminMiddleware,updateProduct);
 router.delete('/delete-product/:id',authMiddleware,storeAdminMiddleware,deleteProduct);
 router.get('/category/:categoryName',authMiddleware,UserRoleMiddleware,getNearestStoreProductsByCategory);
+router.get('/get-my-products',authMiddleware,storeAdminMiddleware,getMyStoreProducts);
 
 
 export default router;
