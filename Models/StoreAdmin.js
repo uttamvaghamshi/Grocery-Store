@@ -10,6 +10,10 @@ const store_admin_schema = new mongoose.Schema({
       type: String,
       required: true
    },
+   area: {
+      type: String,
+      required: true
+   },
    role: {
       type: String,
       default: "store_admin"

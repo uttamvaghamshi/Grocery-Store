@@ -10,7 +10,6 @@ export const registerStoreAdmin = async (req, res) => {
       password,
       latitude,
       longitude,
-      city,
       area
     } = req.body;
 
@@ -42,6 +41,7 @@ export const registerStoreAdmin = async (req, res) => {
     const newAdmin = new StoreAdmin({
       username,
       password_hash: hashedPassword,
+      area,
       location: latitude !== undefined && longitude !== undefined 
         ? { lat: Number(latitude), long: Number(longitude) } 
         : undefined,
@@ -56,6 +56,7 @@ export const registerStoreAdmin = async (req, res) => {
         id: newAdmin._id,
         username: newAdmin.username,
         role: newAdmin.role,
+        area,
         location: newAdmin.location || null
       }
     });
@@ -133,7 +134,8 @@ export const loginStoreAdmin = async (req, res) => {
 
 export const getAllStores = async (req, res) => {
   try {
-    const stores = await StoreAdmin.find({ isActive: true });
+    const stores = await StoreAdmin.find({ isActive: true })
+    .select("-password_hash -__v");
     res.json(stores);
   } catch (err) {
     res.status(500).json({ message: err.message });

@@ -16,9 +16,10 @@ export const addProduct = async(req,res) => {
             available_quantity
         });
 
-        await product.save();
-
-        res.status(201).json({message:"Product Added Successfully"},product);
+        res.status(201).json({
+        message: "Product Added Successfully",
+        product
+        });
     }
     catch(err) {
         res.status(500).json({message:"Failed to add product", error: err.message});
@@ -54,7 +55,6 @@ export const getNearestStoreProductsByCategory = async (req, res) => {
       return res.status(400).json({ message: "User location not set" });
     }
 
-    // 1️⃣ Find nearest store
     const nearestStore = await findNearestStore(
       user.location.lat,
       user.location.long
@@ -64,12 +64,11 @@ export const getNearestStoreProductsByCategory = async (req, res) => {
       return res.status(404).json({ message: "No Store Found Nearby" });
     }
 
-    // 2️⃣ Find products by category name inside nearest store
     const products = await Product.find({
       store_id: nearestStore._id,
       category: categoryName
     })
-      .populate("images")   // 🔥 load images
+      .populate("images")  
       .lean();
 
     res.status(200).json({

@@ -20,7 +20,7 @@ export const addAddress = async(req,res) => {
             latitude,
             longitude
         });
-
+        
         res.status(201).json({message:"Address Added Successfully"});
     }
     catch(err) {

@@ -23,10 +23,9 @@ const riderSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    kyc_status: {
-        type: String,
-        enum: ["pending","approved","rejected"],
-        default: "pending"
+    dob: {
+        type: Date,
+        required: true
     },
     selectedStores : [
         {

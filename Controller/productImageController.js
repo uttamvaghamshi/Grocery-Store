@@ -16,9 +16,9 @@ export const uploadProductImage = async (req, res) => {
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
-        console.log("REQ ID:", req.id);
+        console.log("REQ ID:", req.user.id);
         console.log("PRODUCT STORE ID:", product.store_id.toString());
-        if (product.store_id.toString() !== req.id) {
+        if (product.store_id.toString() !== req.user.id) {
             return res.status(403).json({ message: "Unauthorized" });
         }
 
@@ -75,11 +75,10 @@ export const deleteProductImage = async (req, res) => {
             return res.status(404).json({ message: "Product not found" });
         }
 
-        if (product.store_id.toString() !== req.id) {
+        if (product.store_id.toString() !== req.user.id) {
             return res.status(403).json({ message: "Unauthorized" });
         }
 
-        // Extract public_id properly
         const public_id = image.image_url
             .split("/")
             .slice(-2)
