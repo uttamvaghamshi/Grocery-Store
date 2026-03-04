@@ -5,7 +5,7 @@ import StoreAdmin from "../Models/StoreAdmin.js";
 
 export const registerStoreAdmin = async (req, res) => {
   try {
-    let { username, password, latitude, longitude, area } = req.body;
+    let { username, password, lat, long, area } = req.body;
 
     if (!username || !password) {
       return res.status(400).json({
@@ -14,7 +14,7 @@ export const registerStoreAdmin = async (req, res) => {
       });
     }
 
-    if (!latitude || !longitude) {
+    if (!lat || !long) {
   return res.status(400).json({
     success: false,
     message: "Latitude and longitude are required"
@@ -36,8 +36,8 @@ export const registerStoreAdmin = async (req, res) => {
     password_hash: hashedPassword,
     area,
     location: {
-      lat: Number(latitude),
-      long: Number(longitude)
+      lat: Number(lat),
+      long: Number(long)
     }
   });
 
