@@ -14,18 +14,12 @@ export const registerStoreAdmin = async (req, res) => {
       });
     }
 
-    const latNum = latitude !== undefined ? Number(latitude) : undefined;
-    const longNum = longitude !== undefined ? Number(longitude) : undefined;
-
-    if (
-      (latNum !== undefined && longNum !== undefined) &&
-      (isNaN(latNum) || isNaN(longNum))
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Latitude and longitude must be valid numbers"
-      });
-    }
+    if (!latitude || !longitude) {
+  return res.status(400).json({
+    success: false,
+    message: "Latitude and longitude are required"
+  });
+}
 
     const existingAdmin = await StoreAdmin.findOne({ username });
     if (existingAdmin) {
@@ -38,14 +32,14 @@ export const registerStoreAdmin = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newAdmin = new StoreAdmin({
-      username,
-      password_hash: hashedPassword,
-      area,
-      location:
-        latNum !== undefined && longNum !== undefined
-          ? { lat: latNum, long: longNum }
-          : undefined
-    });
+    username,
+    password_hash: hashedPassword,
+    area,
+    location: {
+      lat: Number(latitude),
+      long: Number(longitude)
+    }
+  });
 
     await newAdmin.save();
 
