@@ -14,7 +14,7 @@ export const registerStoreAdmin = async (req, res) => {
       });
     }
 
-    if (!lat || !long) {
+    if (lat === undefined || long === undefined) {
   return res.status(400).json({
     success: false,
     message: "Latitude and longitude are required"
@@ -28,6 +28,11 @@ export const registerStoreAdmin = async (req, res) => {
         message: "Username already exists"
       });
     }
+
+    console.log(lat);
+    console.log(long);
+    
+    
 
     const hashedPassword = await bcrypt.hash(password, 10);
 

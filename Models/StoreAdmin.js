@@ -19,8 +19,14 @@ const store_admin_schema = new mongoose.Schema({
       default: "store_admin"
    },
    location: {
-    lat: Number,
-    long: Number
+    lat: {
+      type: Number,
+      required: true
+    },
+    long: {
+      type : Number,
+      required: true
+    }
    }
 });
 
