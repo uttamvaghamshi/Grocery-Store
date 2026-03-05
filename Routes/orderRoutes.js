@@ -4,14 +4,14 @@ import userRoleMiddleware from "../Middleware/userRoleMiddleware.js";
 import storeAdminMiddleware from '../Middleware/storeAdminMiddleware.js';
 import riderRoleMiddleware from '../Middleware/riderRoleMiddleware.js';
 
-import { acceptOrder, AssignRider, cancelOrder, completeDelivery, getSingleOrder, getStoreOrders, getUserOrders, placeOrder } from "../Controller/orderController.js";
+import { acceptOrder, AssignRider, cancelOrder, completeDelivery, getMyOrders, getSingleOrder, getStoreOrders, getUserOrders, placeOrder } from "../Controller/orderController.js";
 
 const router = express.Router();
 
 router.get('/get-orders',authMiddleware,storeAdminMiddleware,getStoreOrders);
 router.post("/place", authMiddleware,userRoleMiddleware, placeOrder);
 
-router.get("/my-orders", authMiddleware,userRoleMiddleware, getUserOrders);
+router.get("/my-orders", authMiddleware,userRoleMiddleware,getMyOrders);
 
 router.get("/:id", authMiddleware,userRoleMiddleware, getSingleOrder);
 
