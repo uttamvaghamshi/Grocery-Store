@@ -4,7 +4,7 @@ import userRoleMiddleware from "../Middleware/userRoleMiddleware.js";
 import storeAdminMiddleware from '../Middleware/storeAdminMiddleware.js';
 import riderRoleMiddleware from '../Middleware/riderRoleMiddleware.js';
 
-import { acceptOrder, AssignRider, cancelOrder, completeDelivery, getMyOrders, getSingleOrder, getStoreOrders, getUserOrders, placeOrder } from "../Controller/orderController.js";
+import { acceptOrder, AssignRider, cancelOrder, completeDelivery, getMyOrders, getSingleOrder, getStoreOrders, placeOrder } from "../Controller/orderController.js";
 
 const router = express.Router();
 
