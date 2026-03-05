@@ -1,5 +1,5 @@
 import express from 'express';
-import { addProduct, deleteProduct, getMyStoreProducts,getNearestStoreProducts, getNearestStoreProductsByCategory, getSingleProduct, updateProduct } from '../Controller/ProductController.js';
+import { addProduct, deleteProduct, getLikedProducts, getMyStoreProducts,getNearestStoreProducts, getNearestStoreProductsByCategory, getSingleProduct, updateProduct } from '../Controller/ProductController.js';
 import authMiddleware from '../Middleware/authMiddleware.js';
 import storeAdminMiddleware from '../Middleware/storeAdminMiddleware.js';
 import UserRoleMiddleware from '../Middleware/userRoleMiddleware.js';
@@ -15,6 +15,6 @@ router.put('/update-product/:id',authMiddleware,storeAdminMiddleware,updateProdu
 router.delete('/delete-product/:id',authMiddleware,storeAdminMiddleware,deleteProduct);
 router.get('/category/:categoryName',authMiddleware,UserRoleMiddleware,getNearestStoreProductsByCategory);
 router.get('/get-my-products',authMiddleware,storeAdminMiddleware,getMyStoreProducts);
-
+router.get('/get-liked-products',authMiddleware,UserRoleMiddleware,getLikedProducts);
 
 export default router;

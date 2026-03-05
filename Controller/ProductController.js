@@ -180,7 +180,6 @@ export const getLikedProducts = async (req, res) => {
 
     res.status(200).json({
       store: nearestStore.storeName,
-      category: categoryName,
       totalProducts: products.length,
       products
     });
