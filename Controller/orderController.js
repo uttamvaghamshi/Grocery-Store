@@ -280,7 +280,7 @@ export const completeDelivery = async (req, res) => {
             return res.status(400).json({ success: false, message: "Order is not out for delivery" });
         }
 
-        const commision = order.total_amount * 0.1;
+        const commision = (order.total_amount * 0.1) + 30;
 
         order.status = "delivered";
         order.deliveredAt = new Date();

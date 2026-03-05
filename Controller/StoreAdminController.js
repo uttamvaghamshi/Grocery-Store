@@ -32,8 +32,6 @@ export const registerStoreAdmin = async (req, res) => {
     console.log(lat);
     console.log(long);
     
-    
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newAdmin = new StoreAdmin({

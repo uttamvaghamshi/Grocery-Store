@@ -3,11 +3,12 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Order from '../Models/Order.js';
 import streamUpload from '../Utils/streamUpload.js';
+import Wallet from '../Models/Wallet.js';
 
 
 export const registerRider = async (req, res) => {
     try {
-        const { name, email, phone, password ,selectedStores} = req.body;
+        const { name, email, phone, password ,selectedStores,dob} = req.body;
 
         if (!req.file) {
             return res.status(400).json({ message: "Image is required" });
@@ -26,6 +27,7 @@ export const registerRider = async (req, res) => {
             phone,
             image_url: result.secure_url,
             password_hash: hashedPassword,
+            dob,
             selectedStores
         });
 
@@ -320,6 +322,26 @@ export const getWalletHistory = async (req, res) => {
 
     } catch (err) {
         res.status(500).json({ message: err.message });
+    }
+}
+
+
+export const riderProfile = async(req,res) => {
+    try {
+        const {rider_id} = req.user.id;
+
+        const profile = await Rider.findOne({rider_id});
+        if(!profile) {
+            return res.status(404).json({message:"Rider Not Found"});
+        }
+        res.status(200).json({
+            status: true,
+            message:"Rider Profile Fetched",
+            profile
+        });
+    }
+    catch(err) {
+        res.status(500).json({message:err.message});
     }
 }
 

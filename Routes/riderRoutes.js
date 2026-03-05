@@ -1,9 +1,10 @@
-import { acceptOrder, deleteRider, getAllRiders, getMyActiveOrders, getPendingOrders, getRiderWallet, getSingleRider, getWalletHistory, loginRider, registerRider, toggleAvailabilty, updateKycStatus, updateOrderStatus, updateRider } from '../Controller/riderController.js';
+import { acceptOrder, deleteRider, getAllRiders, getMyActiveOrders, getPendingOrders, getRiderWallet, getSingleRider, getWalletHistory, loginRider, registerRider, riderProfile, toggleAvailabilty, updateKycStatus, updateOrderStatus, updateRider } from '../Controller/riderController.js';
 import authMiddleware from '../Middleware/authMiddleware.js';
 import riderRoleMiddleware from '../Middleware/riderRoleMiddleware.js';
 import adminRoleMiddleware from '../Middleware/adminRoleMiddleware.js';
 import express from 'express';
 import upload from '../Middleware/upload.js';
+import { profile } from '../Controller/UserController.js';
 
 const router = express.Router();
 
@@ -21,5 +22,7 @@ router.get('/my-active',authMiddleware,riderRoleMiddleware,getMyActiveOrders);
 router.put('/update-status',authMiddleware,riderRoleMiddleware,updateOrderStatus);
 router.get('/get-wallet-history',authMiddleware,riderRoleMiddleware,getWalletHistory);
 router.get('/get-rider-wallet',authMiddleware,riderRoleMiddleware,getRiderWallet);
+router.get('/profile',authMiddleware,riderRoleMiddleware,riderProfile);
+
 
 export default router;

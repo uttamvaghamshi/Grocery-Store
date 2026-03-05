@@ -8,7 +8,7 @@ import { uploadLicence,updateLicenseStatus } from "../Controller/licenceControll
 const router = express.Router();
 
 
-router.post("/upload",authMiddleware, isRider, upload.single("license_image"), uploadLicence);
+router.post("/upload/:id",authMiddleware, isRider, upload.single("license_image"), uploadLicence);
 
 router.put("/verify/:id",authMiddleware, isAdmin, updateLicenseStatus);
 

@@ -15,7 +15,7 @@ const walletSchema = new mongoose.Schema({
 
     type: {
         type: String,
-        enum: ["credit", "debit"]
+        default: "credit"
     }
 
 }, { timestamps: true });

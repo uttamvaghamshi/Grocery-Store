@@ -4,16 +4,17 @@ import streamifier from "streamifier";
 import RiderLicence from '../Models/Licence.js';
 import streamUpload from '../Utils/streamUpload.js';
 
+
 export const uploadLicence = async (req, res) => {
     try {
-        const riderid = req.user.id;
+        const { rider_id } = req.params;
         const { license_number, expiry_date } = req.body;
 
         if (!req.file) {
             return res.status(400).json({ message: "License image is required" });
         }
 
-        const existing = await RiderLicence.findOne({ riderid });
+        const existing = await RiderLicence.findOne({ rider_id });
         if (existing) {
             return res.status(400).json({ message: "License already uploaded" });
         }
@@ -24,7 +25,7 @@ export const uploadLicence = async (req, res) => {
         );
 
         const newLicence = await RiderLicence.create({
-            riderid,
+            rider_id,
             license_number,
             expiry_date,
             license_image: result.secure_url,
