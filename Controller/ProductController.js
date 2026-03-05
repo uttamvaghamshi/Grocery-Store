@@ -152,3 +152,41 @@ export const updateProduct = async(req,res) => {
     }
 }
 
+
+export const getLikedProducts = async (req, res) => {
+  try {
+
+    const user = await User.findById(req.user.id);
+
+    if (!user || !user.location) {
+      return res.status(400).json({ message: "User location not set" });
+    }
+
+    const nearestStore = await findNearestStore(
+      user.location.lat,
+      user.location.long
+    );
+
+    if (!nearestStore) {
+      return res.status(404).json({ message: "No Store Found Nearby" });
+    }
+
+    const products = await Product.find({
+      store_id: nearestStore._id,
+    })
+    .sort({likes: -1})
+    .limit(10)
+    .populate("images");
+
+    res.status(200).json({
+      store: nearestStore.storeName,
+      category: categoryName,
+      totalProducts: products.length,
+      products
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
