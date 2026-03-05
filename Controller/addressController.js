@@ -57,6 +57,8 @@ export const updateAddress = async(req,res) => {
 
         Object.assign(addrees,req.body);
 
+        await addrees.save();
+
         res.json({
             message:"Address Updated Successfully"
         })
