@@ -175,7 +175,7 @@ export const getLikedProducts = async (req, res) => {
       store_id: nearestStore._id,
     })
     .sort({likes: -1})
-    .limit(10)
+    .limit(1)
     .populate("images");
 
     res.status(200).json({
