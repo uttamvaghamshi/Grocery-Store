@@ -45,6 +45,26 @@ export const getNearestStoreProducts = async(req,res) => {
     }
 }
 
+export const getNearestStoreProductsSingle = async(req,res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        const {productId} = req.params;
+        if (!user.location) {
+            return res.status(400).json({ message: 'User location not set' });
+        }
+        const nearestStore = await findNearestStore(user.location.lat, user.location.long);
+
+        if(!nearestStore) {
+            return res.status(404).json({message:"No Store Found Nearby"});
+        }
+        const products = await Product.find({store_id:nearestStore._id,_id:productId});
+        res.json(products);
+    }
+    catch(err) {
+        res.status(500).json({message:err.message});
+    }
+}
+
 export const getNearestStoreProductsByCategory = async (req, res) => {
   try {
     const { categoryName } = req.params;
@@ -175,7 +195,7 @@ export const getLikedProducts = async (req, res) => {
       store_id: nearestStore._id,
     })
     .sort({likes: -1})
-    .limit(1)
+    .limit(5)
     .populate("images");
 
     res.status(200).json({
@@ -188,4 +208,27 @@ export const getLikedProducts = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const addLikedProducts = async(req,res) => {
+    try {
+      const userId = req.user.id;
+      const {productId} = req.params;
+
+      const user = await User.findById(userId);
+      const product = await Product.findById(productId);
+      if(!product) {
+        return res.status(404).json({message:"Product Not Found"});
+      }
+      if(user.liked_products.includes(productId)) {
+        return res.status(400).json({message:"Product Already Liked"});
+      }
+      user.liked_products.push(productId);
+      await user.save();
+      product.likes += 1;
+      await product.save();
+    }
+    catch(err) {
+        res.status(500).json({ message: err.message });
+    }
+}
 
