@@ -50,19 +50,40 @@ export const placeOrder = async(req,res) => {
     }
 }
 
-export const getUserOrders = async(req,res) => {
-    try {
-        const user_id = req.user.id;
+export const getMyOrders = async (req, res) => {
+  try {
+    const userId = req.user.id;
 
-        const orders = await Order.find({user_id}).sort({created_at: -1});
+    const orders = await Order.find({ user_id: userId }).sort({ createdAt: -1 });
 
-        res.status(200).json(orders);
+    const ordersWithItems = await Promise.all(
+      orders.map(async (order) => {
+        const items = await OrderItem.find({ order_id: order._id })
+          .populate({
+            path: "product_id",
+            select: "name price description store_id",
+            populate: {
+              path: "store_id",
+              select: "name location"
+            }
+          });
 
-    }
-    catch(err) {
-        res.status(500).json({message:err.message});
-    }
-}
+        return {
+          _id: order._id,
+          total_price: order.total_price,
+          status: order.status,
+          createdAt: order.createdAt,
+          items
+        };
+      })
+    );
+
+    res.status(200).json({ success: true, orders: ordersWithItems });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
 
 export const getSingleOrder = async(req,res) => {
     try {
